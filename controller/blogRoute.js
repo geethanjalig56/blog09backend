@@ -25,8 +25,36 @@ hashPasswordGenerator(pw).then(
     }
 )
 
+
+
 })
 
+router.post("/signin", async(req,res)=>{
+    // let input = req.body
+    // let data = await usermodel1.find(input)
+    // res.json(data)
+    let findemail = req.body.email
+    let inputPassword = req.body.pw
+    let data = await usermodel1.findOne({"email":findemail})
+    if(!data)
+    {
+        return     res.json({status:"no user found"})
 
+    }
+   
+ //   console.log(data)
+    let dbPassword = data.pw
+    console.log(dbPassword)
+    console.log(inputPassword)
+    
+    const match = await bcrypt.compare(inputPassword,dbPassword)
+    if(!match)
+    {
+        return     res.json({status:"incorrect password"})
+
+    }
+    res.json({status:"success user hai"})
+
+    })
 
 module.exports=router
